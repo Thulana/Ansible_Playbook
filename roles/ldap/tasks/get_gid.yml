@@ -1,0 +1,16 @@
+---
+
+- name: Get gid
+  shell: awk -F "=" '/gid/ {print $2}' {{ config_file_path }}/Details.ini | tr -d ' '
+  register: gidData
+- set_fact: gid={{ gidData.stdout | int + 1  }}
+
+- debug: msg={{ gid }}
+
+
+- ini_file:
+    path: "{{ config_file_path }}/Details.ini"
+    section: ldap
+    option: gid
+    value: "{{ gid }}"
+    backup: no

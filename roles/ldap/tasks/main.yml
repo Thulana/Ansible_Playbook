@@ -1,0 +1,74 @@
+- debug: msg={{ add_usr }}
+- name: Check whether group exist
+  action: shell getent group {{ group_name }}
+  register: group_exist
+  ignore_errors: true
+  when:
+    - add_grp >= 1
+
+- name: Check whether user exist
+  action: shell /usr/bin/getent passwd {{ user_name }}
+  register: user_exist
+  ignore_errors: true
+  when:
+    - add_usr >= 1
+
+#- debug: msg={{ user_exist.stdout }}
+#- debug:
+#    msg: "user already exist in the system please use another username and try again"
+#  when:
+#    - user_exist.stdout != ""
+
+- include: roles/ldap/tasks/get_uid.yml
+  when:
+    - add_usr >= 1
+    - user_exist.stdout == ""
+
+#- debug: msg={{ uid }}
+
+- name: set gid to uid
+  set_fact: gid={{ uid  }}
+  when:
+    - add_grp == 1
+    - user_exist.stdout == ""
+
+
+- include: roles/ldap/tasks/get_gid.yml
+  when:
+    - add_grp == 2
+    - user_exist.stdout == ""
+
+- include: roles/ldap/tasks/add_group.yml
+  when:
+    - add_grp >= 1
+    - user_exist.stdout == ""
+#   - group_exist.stdout == ""
+
+
+- include: roles/ldap/tasks/add_client_users.yml
+  when:
+    - add_usr == 1
+    - user_exist.stdout == ""
+
+- include: roles/ldap/tasks/add_employee_users.yml
+  when:
+    - add_usr == 2
+    - user_exist.stdout == ""
+
+- include: roles/ldap/tasks/delete_user.yml
+  when:
+    - add_usr == -1
+
+- include: roles/ldap/tasks/delete_group.yml
+  when:
+    - add_grp == -1
+
+- include: roles/ldap/tasks/add_users_to_group.yml
+  when:
+      - ldap_issue_permissions
+
+- debug:
+    msg: "user already exist in the system. please use another username and try again"
+  when:
+    - add_usr == 1
+    - user_exist.stdout != ""

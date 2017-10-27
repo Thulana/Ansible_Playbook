@@ -1,0 +1,8 @@
+sftp_home_partition: /ftp
+sftp_directories: [ home ]
+user_name: "thulana"
+dir_mode: "0755"
+sftp_config: false
+permissions: true
+directories: true
+default_dir: "home"
