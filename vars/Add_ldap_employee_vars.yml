@@ -1,0 +1,28 @@
+sftp_home_partition: "/home"
+user_name: "redhat3"
+add_usr: 2
+add_grp: 0
+usr_gid: 8600
+config_file_path: "/var/lib/ansible/tower/config/ldap_employee_creation"
+ldap_server_uri: "ldaps://ldap.orangehrm.com"
+base_dn: "dc=orangehrm,dc=com"
+usr_base_dn: "ou=engineers,ou=employees,ou=users,dc=orangehrm,dc=com"
+bind_dn: "uid=ansible-tower,ou=bind,ou=users,dc=orangehrm,dc=com"
+bind_pw: "nmIo*9EkRkG7R6j"
+usr_pwd: "sshkey"
+surname: "FTP"
+sshkey_path: "/home/ansible"
+employee_type: "developers"
+login_shell: "bin/bash"
+email_host: "smtp.mandrillapp.com"
+email_to: "thulanakannangara@gmail.com"
+email_cc:
+email_subject: "LDAP Account Details"
+email_body: "Hi {{ user_name }}, <br>  Please find your LDAP credentials below. Please note that you should not share this with anyone under any circumstances. You can use this credentials to log into authorized servers and systems. <br> <br> username : {{ user_name }} <br> password : {{ text_usr_pwd }} <br>  <br>  "
+email_subtype: "html"
+email_port: 587
+email_username: "notifications1@orangehrmlive.com"
+email_password: "tBfAi8afNH4Y6d6ezVliXw"
+email_secure: "starttls"
+email_from: "notifications1@orangehrmlive.com (OHRM Ansible Tower)"
+email_attach: "{{ sshkey_path }}/sshkey"
