@@ -1,0 +1,14 @@
+---
+- name: sshd | ssh configuration for ssh key authentication using ldap
+  hosts:
+    - iris
+    - phantom
+#    - artemis
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars_files:
+      - vars/sshd_ldap_publickey_vars.yml
+  roles:
+    - sshd
+
